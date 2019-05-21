@@ -93,6 +93,11 @@ export default {
         this.$ga.event("pvmaker", "onclick", "copy", "failed");
       } else {
         console.log("copy text:" + copyText);
+        this.$toast.open({
+          duration: 1500,
+          message: `コピー成功しました。`,
+          position: "is-bottom"
+        });
         this.$ga.event("pvmaker", "onclick", "copy", copyText);
       }
     },
