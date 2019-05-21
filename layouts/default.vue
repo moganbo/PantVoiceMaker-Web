@@ -6,7 +6,8 @@
 
 <style>
 html {
-  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 16px;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
@@ -16,7 +17,9 @@ html {
   box-sizing: border-box;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: border-box;
   margin: 0;
 }
@@ -48,6 +51,45 @@ html {
 .button--grey:hover {
   color: #fff;
   background-color: #35495e;
+}
+
+.font-size-is-minimal {
+  font-size: 0.5rem;
+}
+.font-size-is-small {
+  font-size: 0.8rem;
+}
+.font-size-is-default {
+  font-size: 1rem;
+}
+.font-size-is-medium {
+  font-size: 1.3rem;
+}
+.font-size-is-large {
+  font-size: 1.5rem;
+}
+.font-size-is-maximum {
+  font-size: 2rem;
+}
+@media only screen and (max-width: 767px) {
+  .font-size-is-minimal {
+    font-size: 0.5rem;
+  }
+  .font-size-is-small {
+    font-size: 0.8rem;
+  }
+  .font-size-is-default {
+    font-size: 1rem;
+  }
+  .font-size-is-medium {
+    font-size: 1.2rem;
+  }
+  .font-size-is-large {
+    font-size: 1.3rem;
+  }
+  .font-size-is-maximum {
+    font-size: 1.5rem;
+  }
 }
 </style>
 
