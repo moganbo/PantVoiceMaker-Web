@@ -90,8 +90,10 @@ export default {
       });
       if (!document.execCommand("copy")) {
         alert("コピー失敗:\n");
+        this.$ga.event("pvmaker", "onclick", "copy", "failed");
       } else {
         console.log("copy text:" + copyText);
+        this.$ga.event("pvmaker", "onclick", "copy", copyText);
       }
     },
     selectPv: function(index) {
@@ -124,6 +126,17 @@ export default {
         return;
       }
       this.resultText = this.createWord();
+      var trackStr =
+        "" +
+        this.selectedPvIndex +
+        "-" +
+        this.selectedWcIndex +
+        "-" +
+        this.isShowName;
+      if (this.isShowName) {
+        trackStr += this.name;
+      }
+      this.$ga.event("pvmaker", "onclick", "result", trackStr);
     },
     createWord: function() {
       var result = "";
@@ -148,7 +161,6 @@ export default {
   height: 100vh;
   padding: 16px;
   text-align: center;
-  background-color: #ffb6c1;
 }
 .result-text-area {
   width: 600px;
