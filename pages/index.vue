@@ -70,7 +70,7 @@ export default {
       selectedPvIndex: -1,
       selectedWcIndex: -1,
       isShowName: false,
-      name: null
+      name: ""
     };
   },
   mounted: function() {
@@ -139,7 +139,7 @@ export default {
         "-" +
         this.isShowName;
       if (this.isShowName) {
-        trackStr += this.name;
+        trackStr += "-" + this.name;
       }
       this.$ga.event("pvmaker", "onclick", "result", trackStr);
     },
@@ -243,6 +243,19 @@ export default {
   .name-area {
     width: 80vw;
     margin: 0 auto;
+  }
+}
+@media only screen and (max-width: 375px) {
+  .pv-buttons {
+    width: 320px;
+    margin: 8px auto;
+  }
+  .pv-button {
+    font-size: 0.8em;
+    width: 64px;
+  }
+  .wc-button {
+    font-size: 0.8em;
   }
 }
 </style>
