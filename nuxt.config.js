@@ -35,7 +35,18 @@ module.exports = {
       }
     }
   },
-  modules: ["nuxt-buefy", "@nuxtjs/toast", "@nuxtjs/google-analytics"],
+  modules: [
+    "nuxt-buefy",
+    "@nuxtjs/toast",
+    // "@nuxtjs/google-analytics",
+    [
+      "@nuxtjs/google-gtag",
+      {
+        id: "UA-140579929-1", //あなたのGoogleアナリティクスのプロパティID
+        debug: true //本番環境以外でもGAを有効にしたい場合はtrueに。
+      }
+    ]
+  ],
   css: ["assets/css/buefy.scss"],
   toast: {
     position: "bottom-center",
@@ -49,8 +60,12 @@ module.exports = {
       }
     ],
     duration: 3000
-  },
-  "google-analytics": {
-    id: "UA-140579929-1"
   }
+  // "google-analytics": {
+  //   id: "UA-140579929-1",
+  //   debug: {
+  //     enabled: true,
+  //     sendHitTask: true
+  //   }
+  // }
 };

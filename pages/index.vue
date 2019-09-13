@@ -9,7 +9,7 @@
     <div class="font-size-is-minimal copy-text">
       ※クリックでコピーできます。
     </div>
-    <div class="pant-voice-area">
+    <!-- <div class="pant-voice-area">
       <p class="font-size-is-medium pv-label">シチュエーション</p>
       <div class="buttons has-addons pv-buttons">
         <button 
@@ -22,6 +22,24 @@
           }"
           v-on:click="selectPv(index)"
         >{{entry.jpName}}</button>
+      </div>
+    </div> -->
+    <div class="pant-voice-area">
+      <p class="font-size-is-medium pv-label">シチュエーション</p>
+      <div v-for="(listEntry, listIndex) in pantVoiceListList"
+          v-bind:key="listIndex" class="buttons has-addons pv-buttons">
+        <div class="pv-button-root">
+        <button 
+          class="button is-primary pv-button" 
+          v-for="(entry, index) in listEntry"
+          v-bind:key="index"
+          v-bind:class="{
+            'is-inverted': listIndex == selectedPvListIndex && index == selectedPvIndex, 
+            'border-is-primary': listIndex == selectedPvListIndex && index == selectedPvIndex
+          }"
+          v-on:click="selectPv(listIndex, index)"
+        >{{entry.jpName}}</button>
+        </div>
       </div>
     </div>
     <div class="word-count-area">
@@ -40,14 +58,16 @@
       </div>
     </div>
     <div class="brackets-area">
+      <div class="brackets-checkbox-area">
       <b-checkbox v-model="isShowName">
         「」をつける
       </b-checkbox>
-    </div>
-    <div class="name-area" v-show="isShowName">
-      <b-field label="名前">
-        <b-input v-model="name"></b-input>
-      </b-field>
+      </div>
+      <div class="name-area" v-show="isShowName">
+        <b-field label="名前">
+          <b-input v-model="name"></b-input>
+        </b-field>
+      </div>
     </div>
     <div class="footer">
       <button 
@@ -65,8 +85,10 @@ export default {
     return {
       resultText: "",
       pantVoiceList: [],
+      pantVoiceListList: [],
       wordCountList: [],
 
+      selectedPvListIndex: -1,
       selectedPvIndex: -1,
       selectedWcIndex: -1,
       isShowName: false,
@@ -75,6 +97,16 @@ export default {
   },
   mounted: function() {
     this.pantVoiceList = this.$store.state.constants.pantVoice;
+    this.$store.state.constants.pantVoice.forEach(function(element, index) {
+      if (
+        !this.pantVoiceListList[element.category] ||
+        !this.pantVoiceListList[element.category].length
+      ) {
+        this.pantVoiceListList[element.category] = [];
+      }
+      this.pantVoiceListList[element.category].push(element);
+    }, this);
+    console.log(this.pantVoiceListList);
     this.wordCountList = this.$store.state.constants.wordCount;
   },
   methods: {
@@ -98,27 +130,51 @@ export default {
           message: `コピー成功しました。`,
           position: "is-bottom"
         });
-        this.$ga.event("pvmaker", "onclick", "copy", copyText);
+        // this.$ga.e\vent("pvmaker", "onclick", "copy", copyText);
+        this.$gtag("event", "pvmaker", {
+          event_category: "onclick",
+          event_label: "copy",
+          value: copyText
+        });
       }
     },
-    selectPv: function(index) {
+    // selectPv: function(index) {
+    //   this.selectedPvIndex = index;
+    // },
+    selectPv: function(listIndex, index) {
+      this.selectedPvListIndex = listIndex;
       this.selectedPvIndex = index;
     },
     selectWc: function(index) {
       this.selectedWcIndex = index;
     },
     showResult: function() {
-      if (this.selectedPvIndex == -1) {
+      if (this.selectedPvListIndex == -1 || this.selectedPvIndex == -1) {
         alert("シチュエーションが選択されていません。");
         return;
       }
       if (
-        this.selectedPvIndex < 0 &&
-        this.selectedPvIndex >= this.pantVoiceList.length
+        this.selectedPvListIndex < 0 &&
+        this.selectedPvListIndex >= this.pantVoiceListList.length
       ) {
         alert("シチュエーションが不正な値です。");
         return;
       }
+      if (
+        this.selectedPvIndex < 0 &&
+        this.selectedPvIndex >=
+          this.pantVoiceListList[selectedPvListIndex].length
+      ) {
+        alert("シチュエーションが不正な値です。");
+        return;
+      }
+      // if (
+      //   this.selectedPvIndex < 0 &&
+      //   this.selectedPvIndex >= this.pantVoiceList.length
+      // ) {
+      //   alert("シチュエーションが不正な値です。");
+      //   return;
+      // }
       if (this.selectedWcIndex == -1) {
         alert("長さが選択されていません。");
         return;
@@ -141,11 +197,31 @@ export default {
       if (this.isShowName) {
         trackStr += "-" + this.name;
       }
-      this.$ga.event("pvmaker", "onclick", "result", trackStr);
+      // this.$ga.event("pvmaker", "onclick", "result", trackStr);
+      this.$gtag("event", "pvmaker", {
+        event_category: "onclick",
+        event_label: "result",
+        value: trackStr
+      });
     },
+    // createWord: function() {
+    //   var result = "";
+    //   var pvList = this.pantVoiceList[this.selectedPvIndex].list;
+    //   var wordCount = this.wordCountList[this.selectedWcIndex].value;
+    //   for (let i = 0; i < wordCount; i++) {
+    //     var rIndex = Math.floor(Math.random() * pvList.length);
+    //     result += pvList[rIndex];
+    //   }
+    //   if (this.isShowName) {
+    //     result = this.name + "「" + result + "」";
+    //   }
+    //   return result;
+    // }
     createWord: function() {
       var result = "";
-      var pvList = this.pantVoiceList[this.selectedPvIndex].list;
+      var pvList = this.pantVoiceListList[this.selectedPvListIndex][
+        this.selectedPvIndex
+      ].list;
       var wordCount = this.wordCountList[this.selectedWcIndex].value;
       for (let i = 0; i < wordCount; i++) {
         var rIndex = Math.floor(Math.random() * pvList.length);
@@ -183,17 +259,20 @@ export default {
   text-align: right;
 }
 .pant-voice-area {
-  margin: 16px 0;
+  margin: 24px 0;
 }
 .pv-buttons {
   width: 540px;
-  margin: 8px auto;
+  margin: 0 auto;
+}
+.pv-button-root {
+  margin: 0 auto;
 }
 .pv-button {
   width: 108px;
 }
 .word-count-area {
-  margin: 16px 0;
+  margin: 24px 0;
 }
 .wc-buttons {
   width: 240px;
@@ -201,6 +280,9 @@ export default {
 }
 .wc-button {
   width: 80px;
+}
+.brackets-area {
+  margin: 32px 0;
 }
 .name-area {
   width: 480px;
@@ -249,13 +331,6 @@ export default {
   .pv-buttons {
     width: 320px;
     margin: 8px auto;
-  }
-  .pv-button {
-    font-size: 0.8em;
-    width: 64px;
-  }
-  .wc-button {
-    font-size: 0.8em;
   }
 }
 </style>

@@ -17,7 +17,8 @@ export var state = function() {
           "んぅ…",
           "くぅ…",
           "ふぁ…"
-        ]
+        ],
+        category: 0
       },
       {
         name: "ordinary",
@@ -38,7 +39,8 @@ export var state = function() {
           "イッちゃ、",
           "っふぁ…っ、",
           "やぁ…っ、"
-        ]
+        ],
+        category: 0
       },
       {
         name: "extreme",
@@ -68,7 +70,8 @@ export var state = function() {
           "んぁっう！",
           "あぐっ！",
           "やっ、だ…！"
-        ]
+        ],
+        category: 0
       },
       {
         name: "heart",
@@ -92,7 +95,8 @@ export var state = function() {
           "ふぅっ♡",
           "♡",
           "♡♡"
-        ]
+        ],
+        category: 1
       },
       {
         name: "lipSound",
@@ -114,7 +118,8 @@ export var state = function() {
           "んぐ…",
           "んふ…",
           "ふっ、"
-        ]
+        ],
+        category: 1
       }
     ],
     wordCount: [
